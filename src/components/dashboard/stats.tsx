@@ -8,7 +8,7 @@ type StatsProps = {
 
 export default function Stats({ analytics, transactions }: StatsProps) {
   return (
-    <section className="py-10 container mx-auto grid grid-cols-2 gap-4">
+    <section className="py-10 px-4 container mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
       <Card>
         <CardHeader>
           <CardTitle>Total Revenue</CardTitle>

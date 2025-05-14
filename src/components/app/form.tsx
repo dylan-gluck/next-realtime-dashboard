@@ -53,7 +53,7 @@ export function TransactionForm() {
   };
 
   return (
-    <section className="py-10 container mx-auto gap-4">
+    <section className="py-10 px-4 container mx-auto gap-4">
       <div className="border border-border rounded-md p-4 mx-auto">
         <h3 className="font-bold text-lg mb-2">Add Transaction</h3>
         <form

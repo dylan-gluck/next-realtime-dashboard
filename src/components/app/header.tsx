@@ -15,7 +15,7 @@ export default function Header({
 }: HeaderProps) {
   return (
     <header className="border-b border-border">
-      <div className="py-6 flex justify-between container mx-auto">
+      <div className="py-6 px-4 flex justify-between container mx-auto">
         <div className="flex items-center gap-3">
           <Image src="/globe.svg" alt="Logo" width={24} height={24} />
           <h1 className="text-2xl font-bold text-foreground leading-0">

@@ -30,7 +30,7 @@ export default function DashboardTable({ transactions }: TableProps) {
   }, [searchTerm, transactions]);
 
   return (
-    <section className="py-10 container mx-auto flex flex-col gap-4">
+    <section className="py-10 px-4 container mx-auto flex flex-col gap-4">
       <div className="flex justify-between items-center mt-6">
         <h3 className="font-semibold">Recent Transactions</h3>
         <div className="flex items-center gap-3">
