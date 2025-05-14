@@ -52,10 +52,12 @@ Transactions appear to have different currencies, total revinue would be in a si
 ### TODO:
 
 - [x] Project Plan
-- [ ] Init Next, TW, Shadcn
-- [ ] Project structure, Types
-- [ ] API route GET `/transactions`
-- [ ] API route POST `/transactions`
-- [ ] API route GET `/events`
-- [ ] Dashboard UI
+- [x] Init Next, TW, Shadcn
+- [x] Project structure, Types
+- [x] Dashboard Basic UI
+- [ ] Hono API
+  - [ ] API route GET `/events`
+  - [ ] API route POST `/transactions`
+- [ ] Dashboard UI Refactor
 - [ ] Add transaction form
+- [ ] Zod validation
