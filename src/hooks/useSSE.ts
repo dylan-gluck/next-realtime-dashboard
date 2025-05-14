@@ -20,22 +20,16 @@ export function useSSE() {
 
     events.onopen = () => {
       setIsConnected(true);
-      console.log("EventSource opened");
     };
 
     events.onmessage = (event) => {
       console.log("EventSource message", event);
     };
 
-    events.addEventListener("ping", (event) => {
-      console.log("EventSource ping", event);
-    });
-
     events.addEventListener("state-update", (event) => {
       console.log("EventSource state-update", event);
       try {
         const parsedData = JSON.parse(event.data);
-        console.log("Parsed data:", parsedData);
         setData(parsedData);
       } catch (e) {
         console.error("Failed to parse SSE data:", e);

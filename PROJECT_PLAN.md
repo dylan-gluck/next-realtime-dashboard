@@ -61,3 +61,13 @@ Transactions appear to have different currencies, total revinue would be in a si
 - [x] Dashboard UI Refactor
 - [x] Add transaction form
 - [ ] Zod validation
+
+---
+
+### Key Decisions & Trade-offs
+
+When starting the project I considered websockets and SSE, but decided to go with SSE because data was only flowing in one direction.
+
+I build the original API using Hono, however was running into issues with the SSE implementation and spent most of my time debugging connection issues. I ended up ditching Hono and wrote a custom implementation of the SSE endpoint which worked as expected.
+
+The goal was to swap out the in-memory store for a DB. With more time I would implement DuckDB and utilize their analytics queries to do most of the calculations. This would also improve the separation of concerns in the backend.

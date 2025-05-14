@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
           ),
         );
 
-        // Keep-alive ping every 10 seconds
+        // Keep-alive ping every 30 seconds
         const pingInterval = setInterval(() => {
           controller.enqueue(
             new TextEncoder().encode(formatSSE("ping", "ping")),
@@ -154,8 +154,6 @@ export async function POST(request: NextRequest) {
 
       // Add to transactions
       transactions = [...transactions, newTransaction];
-
-      console.log("Transaction added:", newTransaction);
 
       // Broadcast update to all connected clients
       const update: StateUpdate = {

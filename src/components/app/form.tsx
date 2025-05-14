@@ -22,16 +22,13 @@ export function TransactionForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/transaction", {
+      await fetch("/api/transaction", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-
-      const result = await response.json();
-      console.log("Transaction created:", result);
 
       // Reset form
       setFormData({
