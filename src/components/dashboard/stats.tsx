@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Analytics, Transaction } from "@/lib/types";
+import currency from "currency.js";
 
 type StatsProps = {
   analytics: Analytics;
@@ -19,7 +20,7 @@ export default function Stats({ analytics, transactions }: StatsProps) {
           )}
           {analytics.totalRevenue > 0 && (
             <span className="text-3xl font-bold">
-              ${analytics.totalRevenue}
+              {currency(analytics.totalRevenue).format()}
             </span>
           )}
         </CardContent>
