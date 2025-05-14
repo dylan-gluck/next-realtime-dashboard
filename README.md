@@ -20,7 +20,8 @@ A real-time sales analytics dashboard that processes transactions and provides i
 - **UI Components**: [Shadcn/UI](https://ui.shadcn.com/) with [Tailwind CSS](https://tailwindcss.com/)
 - **Real-time Updates**: Server-Sent Events (SSE)
 - **State Management**: React Hooks with custom `useSSE` hook
-- **Type Safety**: TypeScript with planned Zod validation
+- **Database**: SQLite with Prisma ORM
+- **Type Safety**: TypeScript with Zod validation
 - **Development**: Turbopack for fast refresh
 
 ## Getting Started
@@ -43,31 +44,43 @@ A real-time sales analytics dashboard that processes transactions and provides i
    pnpm install
    ```
 
-3. Start the development server:
+3. Set up the database:
+   ```bash
+   pnpm db:seed
+   ```
+
+4. Start the development server:
    ```bash
    pnpm dev
    ```
 
-4. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
+5. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
 
 ## Project Structure
 
 ```
 /
-├── public/         # Static assets
+├── prisma/        # Prisma ORM files
+│   ├── schema.prisma # Database schema
+│   └── seed.js    # Database seeding script
+├── public/        # Static assets
 ├── src/
-│   ├── app/        # Next.js App Router pages
-│   │   ├── api/    # API routes for SSE and transactions
-│   │   ├── new/    # Add transaction page
+│   ├── app/       # Next.js App Router pages
+│   │   ├── api/   # API routes for SSE and transactions
+│   │   ├── new/   # Add transaction page
 │   │   └── page.tsx # Dashboard page
 │   ├── components/ # UI components
-│   │   ├── app/    # Application components
+│   │   ├── app/   # Application components
 │   │   ├── dashboard/ # Dashboard-specific components
-│   │   └── ui/    # Shadcn UI components
-│   ├── hooks/     # Custom React hooks
+│   │   └── ui/   # Shadcn UI components
+│   ├── hooks/    # Custom React hooks
 │   │   └── useSSE.ts # SSE connection management hook
-│   └── lib/       # Shared utilities and types
-└── ...            # Config files
+│   └── lib/      # Shared utilities and types
+│       ├── prisma.ts # Prisma client
+│       ├── sse.ts # SSE utility functions
+│       ├── transactions.ts # Transaction operations
+│       └── types.ts # TypeScript types
+└── ...           # Config files
 ```
 
 ## API Routes
@@ -107,6 +120,12 @@ pnpm start
 
 # Run linting
 pnpm lint
+
+# Seed the database
+pnpm db:seed
+
+# Open Prisma Studio database UI
+pnpm prisma:studio
 ```
 
 ## Data Model
@@ -114,12 +133,14 @@ pnpm lint
 ### Transaction
 
 ```typescript
-interface Transaction {
-  id: string;
-  date: Date;
-  customerName: string;
-  amount: number;
-  currency: string;
+model Transaction {
+  id           String   @id @default(uuid())
+  date         DateTime @default(now())
+  customerName String
+  amount       Float
+  currency     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 ```
 
@@ -137,8 +158,10 @@ The application follows a client-server architecture with real-time communicatio
 
 1. **Server-Side**:
    - API routes handle SSE connections and transaction submission
-   - In-memory storage maintains transaction data (planned to be updated to a local DB)
-   - Analytics are calculated server-side
+   - Prisma ORM with SQLite database maintains transaction data
+   - SSE client connections are managed separately from data storage
+   - Analytics are calculated server-side with database queries
+   - Input validation with Zod ensures data integrity
 
 2. **Client-Side**:
    - Custom `useSSE` hook manages the EventSource connection
@@ -147,19 +170,24 @@ The application follows a client-server architecture with real-time communicatio
 
 3. **Real-time Flow**:
    - Client establishes SSE connection to `/api/events`
-   - Server sends initial state and maintains connection
-   - New transactions trigger updates to all connected clients
+   - Server sends initial state from database and maintains connection
+   - New transactions are stored in the database and trigger updates to all connected clients
    - UI components re-render with fresh data without page reloads
 
 ## Future Improvements
 
-- [ ] Add Zod validation for form inputs and API requests
-- [ ] Implement persistent storage with a local database
+- [x] Add Zod validation for form inputs and API requests
+- [x] Implement persistent storage with a local database (SQLite + Prisma)
+- [ ] Implement reconnection strategy for SSE with exponential backoff
 - [ ] Implement currency conversion for multi-currency transactions
 - [ ] Add more analytics metrics and visualizations
+- [ ] Add pagination for large transaction lists
+- [ ] Implement unit and integration tests
 
 ## Acknowledgements
 
 - [Next.js](https://nextjs.org/)
 - [Shadcn/UI](https://ui.shadcn.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [Prisma](https://prisma.io/)
+- [Zod](https://zod.dev/)
