@@ -1,7 +1,7 @@
 "use client";
 
 import { useSSE } from "@/hooks/useSSE";
-import Header from "@/components/dashboard/header";
+import Header from "@/components/app/header";
 import Stats from "@/components/dashboard/stats";
 import DashboardTable from "@/components/dashboard/table";
 

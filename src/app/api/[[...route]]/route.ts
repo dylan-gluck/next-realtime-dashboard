@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
           controller.enqueue(
             new TextEncoder().encode(formatSSE("ping", "ping")),
           );
-        }, 10000);
+        }, 30000);
 
         // Handle client disconnect
         request.signal.addEventListener("abort", () => {

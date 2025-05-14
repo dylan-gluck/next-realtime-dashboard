@@ -58,6 +58,6 @@ Transactions appear to have different currencies, total revinue would be in a si
 - [x] API routes
   - [x] API route GET `/events` (SSE)
   - [x] API route POST `/transactions`
-- [ ] Dashboard UI Refactor
-- [ ] Add transaction form
+- [x] Dashboard UI Refactor
+- [x] Add transaction form
 - [ ] Zod validation
