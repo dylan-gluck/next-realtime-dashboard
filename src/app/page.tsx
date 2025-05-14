@@ -14,9 +14,22 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useSSE } from "@/hooks/useSSE";
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const { transactions, analytics, isConnected } = useSSE();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredTransactions, setfilteredTransactions] =
+    useState(transactions);
+
+  // Filter transactions based on search term
+  useEffect(() => {
+    const filtered = transactions.filter((tx) =>
+      tx.customerName.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+
+    setfilteredTransactions(filtered);
+  }, [searchTerm, transactions]);
 
   return (
     <div className="contents">
@@ -67,7 +80,12 @@ export default function Dashboard() {
           <h3 className="font-semibold">Recent Transactions</h3>
           <div className="flex items-center gap-3">
             <Funnel className="text-muted-foreground w-4 h-4" />
-            <Input placeholder="Filter by customer" className="max-w-lg" />
+            <Input
+              placeholder="Filter by customer"
+              className="max-w-lg"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
         <div className="p-4 border border-border rounded-md">
@@ -81,8 +99,8 @@ export default function Dashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {transactions && transactions.length > 0 ? (
-                transactions.map((transaction) => (
+              {filteredTransactions && filteredTransactions.length > 0 ? (
+                filteredTransactions.map((transaction) => (
                   <TableRow key={transaction.id}>
                     <TableCell>{transaction.customerName}</TableCell>
                     <TableCell>{transaction.amount.toFixed(2)}</TableCell>
