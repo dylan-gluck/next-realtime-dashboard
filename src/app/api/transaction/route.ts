@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { broadcastUpdate } from "@/lib/sse";
-import { createTransaction, getCurrentState } from "@/lib/transactions";
+import { createTransaction } from "@/lib/transactions";
 
 // Transaction input validation schema
 const transactionSchema = z.object({
@@ -30,9 +30,8 @@ export async function POST(request: NextRequest) {
     // Create new transaction
     const newTransaction = await createTransaction(validationResult.data);
 
-    // Get updated state and broadcast to clients
-    const updatedState = await getCurrentState();
-    broadcastUpdate(updatedState);
+    // Broadcast update notification to all clients
+    broadcastUpdate();
 
     return NextResponse.json({
       success: true,

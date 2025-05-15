@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addClient, formatSSE, removeClient } from "@/lib/sse";
-import { getCurrentState } from "@/lib/transactions";
 
 // SSE endpoint
 export async function GET(request: NextRequest) {
@@ -10,16 +9,15 @@ export async function GET(request: NextRequest) {
       // Add this client to our connected clients
       const client = addClient(controller);
 
-      // Send initial state
+      // Send initial update notification
       try {
-        const initialState = await getCurrentState();
         controller.enqueue(
           new TextEncoder().encode(
-            formatSSE("state-update", JSON.stringify(initialState)),
+            formatSSE("update", JSON.stringify({ timestamp: Date.now() })),
           ),
         );
       } catch (error) {
-        console.error("Error sending initial state:", error);
+        console.error("Error sending initial notification:", error);
         controller.enqueue(
           new TextEncoder().encode(
             formatSSE(
