@@ -66,7 +66,7 @@ A real-time sales analytics dashboard that processes transactions and provides i
 ├── public/        # Static assets
 ├── src/
 │   ├── app/       # Next.js App Router pages
-│   │   ├── api/   # API routes for SSE and transactions
+│   │   ├── api/   # API routes for SSE, transactions, and analytics
 │   │   ├── new/   # Add transaction page
 │   │   └── page.tsx # Dashboard page
 │   ├── components/ # UI components
@@ -85,9 +85,11 @@ A real-time sales analytics dashboard that processes transactions and provides i
 
 ## API Routes
 
-The application provides two main API endpoints:
+The application provides the following API endpoints:
 
-- **GET /api/events**: SSE endpoint for real-time updates
+- **GET /api/events**: SSE endpoint for real-time update notifications
+- **GET /api/transactions**: Endpoint to fetch all transactions
+- **GET /api/analytics**: Endpoint to fetch analytics data
 - **POST /api/transaction**: Endpoint to add new transactions
 
 ## Usage
@@ -157,27 +159,30 @@ interface Analytics {
 The application follows a client-server architecture with real-time communication:
 
 1. **Server-Side**:
-   - API routes handle SSE connections and transaction submission
+   - API routes handle SSE connections, data fetching, and transaction submission
    - Prisma ORM with SQLite database maintains transaction data
    - SSE client connections are managed separately from data storage
    - Analytics are calculated server-side with database queries
    - Input validation with Zod ensures data integrity
 
 2. **Client-Side**:
-   - Custom `useSSE` hook manages the EventSource connection
+   - Custom `useSSE` hook manages the EventSource connection and data fetching
    - React components render and update based on real-time data
    - Client-side filtering for transactions
 
 3. **Real-time Flow**:
    - Client establishes SSE connection to `/api/events`
-   - Server sends initial state from database and maintains connection
-   - New transactions are stored in the database and trigger updates to all connected clients
+   - Client fetches initial data from `/api/transactions` and `/api/analytics` on page load
+   - Server only sends lightweight update notifications with timestamps via SSE
+   - When a notification is received, client fetches fresh data from the API
+   - New transactions are stored in the database and trigger update notifications to all connected clients
    - UI components re-render with fresh data without page reloads
 
 ## Future Improvements
 
 - [x] Add Zod validation for form inputs and API requests
 - [x] Implement persistent storage with a local database (SQLite + Prisma)
+- [x] Refactor SSE to send lightweight notifications instead of full state
 - [ ] Implement reconnection strategy for SSE with exponential backoff
 - [ ] Implement currency conversion for multi-currency transactions
 - [ ] Add more analytics metrics and visualizations

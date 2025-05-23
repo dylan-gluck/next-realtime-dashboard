@@ -1,5 +1,3 @@
-import { StateUpdate } from './types';
-
 // SSE client management
 type Client = {
   controller: ReadableStreamDefaultController;
@@ -30,9 +28,9 @@ export function formatSSE(event: string, data: string): string {
   return `event: ${event}\ndata: ${data}\n\n`;
 }
 
-// Broadcast to all connected clients
-export function broadcastUpdate(stateUpdate: StateUpdate): void {
-  const data = formatSSE('state-update', JSON.stringify(stateUpdate));
+// Broadcast update notification to all connected clients
+export function broadcastUpdate(): void {
+  const data = formatSSE('update', JSON.stringify({ timestamp: Date.now() }));
   
   clients.forEach((client) => {
     try {
